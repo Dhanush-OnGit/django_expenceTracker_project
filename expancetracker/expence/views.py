@@ -5,11 +5,12 @@ from expence.serializer import UserSerializer,ExpenceSerializer
 from django.contrib.auth.models import User
 from expence.models import Expences
 from rest_framework import status 
-from rest_framework.authentication import BasicAuthentication,TokenAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from django.db.models import Sum,Avg
+from django.db.models import Sum
 from django.utils import timezone
+from expence.permission import IsOwner
 
 # Create your views here.
 class Signupview(ViewSet):
@@ -22,7 +23,8 @@ class Signupview(ViewSet):
         
 class ExpenceView(ModelViewSet):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwner]
     def create(self, request):
         dserializer = ExpenceSerializer(data=request.data)
         if dserializer.is_valid():
@@ -57,7 +59,8 @@ class ExpenceView(ModelViewSet):
             
 class ExpenceSummary(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwner]
     def get(self,request):
         cur_date = timezone.now()
         #print(cur_date)
