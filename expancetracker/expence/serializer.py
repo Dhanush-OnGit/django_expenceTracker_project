@@ -7,6 +7,9 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id","username","email","password"]
         read_only_fields = ["id"]
+    def create(self, validated_data):
+        print(validated_data)
+        return User.objects.create_user(**validated_data)
     
 class ExpenceSerializer(serializers.ModelSerializer):
 
@@ -21,7 +24,7 @@ class ExpenceSerializer(serializers.ModelSerializer):
     def get_owner(self,obj):
         return obj.owner.username
 
-class EmployeeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Employee
-        fields = "__all__"
+# class EmployeeSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Employee
+#         fields = "__all__"
